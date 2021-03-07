@@ -1,12 +1,18 @@
 import useMethods from './useMethods'
 
+const methods = {
+	setTrue: () => true,
+	setFalse: () => false,
+	toggle: state => !state,
+	setState: (_, e) => e,
+}
+
 function useBoolean(initialValue = false) {
-	const [bool, methods] = useMethods(initialValue, {
-		setTrue: () => true,
-		setFalse: () => false,
-		toggle: state => !state,
-	})
-	return [bool, methods]
+	const [bool, { setTrue, setFalse, toggle, setState }] = useMethods(
+		initialValue,
+		methods,
+	)
+	return [bool, { setTrue, setFalse, toggle, setState }]
 }
 
 export default useBoolean
