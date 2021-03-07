@@ -47,6 +47,13 @@ function useLoad(promiseFun, options) {
 		[promiseFun, pFun],
 	)
 
+	const doRun = useCallback(
+		async (...args) => {
+			return await pFun(promiseFun, 'run', ...args)
+		},
+		[promiseFun, pFun],
+	)
+
 	useEffect(() => {
 		const { current } = run
 		if (current !== false) {
@@ -59,7 +66,7 @@ function useLoad(promiseFun, options) {
 		}
 	}, [])
 
-	return { error: state.error, pending: state.pending, dispatch }
+	return { error: state.error, pending: state.pending, dispatch, run: doRun }
 }
 
 export default useLoad
