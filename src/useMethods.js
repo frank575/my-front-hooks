@@ -6,7 +6,7 @@ function useMethods(initialValue, methods) {
 		() =>
 			Object.entries(methods).reduce(
 				(p, [name, fn]) => (
-					(p[name] = (...args) => setState(fn(state, ...args))), p
+					(p[name] = (...args) => setState(state => fn(state, ...args))), p
 				),
 				{},
 			),
