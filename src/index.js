@@ -3,6 +3,7 @@ import useSessionStorageState from './storage/useSessionStorageState'
 import useStorageState from './storage/useStorageState'
 import useMethods from './useMethods'
 import useLoad from './useLoad'
+import useBoolean from './useBoolean'
 
 export {
 	useLocalStorageState,
@@ -10,4 +11,5 @@ export {
 	useStorageState,
 	useMethods,
 	useLoad,
+	useBoolean,
 }
