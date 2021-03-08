@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, MutableRefObject } from 'react'
 
 /**
  * 加載用鉤子
  * @template T
  * @param {Promise<*> | T} promiseFun
- * @param {{append?: HTMLElement | React.MutableRefObject<HTMLElement>, run?: string | boolean | Array.<string, ...*>}} [options= { run: 'run' }] options
+ * @param {{append?: HTMLElement | MutableRefObject<HTMLElement>, run?: string | boolean | Array.<string, ...*>}} [options= { run: 'run' }] options
  * @returns {{pending: (boolean | Object.<keyof T, boolean>), error: string, exec: (Promise<*> | T)}}
  */
 function useLoad(promiseFun, options) {

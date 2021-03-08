@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, Dispatch } from 'react'
 import { getStorageItem, useUpdateStorage } from './util'
 
 /**
@@ -6,7 +6,7 @@ import { getStorageItem, useUpdateStorage } from './util'
  * @template T
  * @param {string} key
  * @param {T} initialValue
- * @returns {[T, function(T | function(T): T): void]}
+ * @returns {[T, Dispatch<T>]}
  */
 function useLocalStorageState(key, initialValue) {
 	const [state, setState] = useState(
