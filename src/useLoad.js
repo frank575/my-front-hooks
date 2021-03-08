@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 /**
  * 加載用鉤子
- * @param promiseFun Promise<void> | { [key: string]: Promise<void> } 執行的方法
- * @param options?
- * 	append: ref | dom
- * 	run: String | Boolean | [string, ...any] = run
+ * @template T
+ * @param {Promise<*> | T} promiseFun
+ * @param {{append?: HTMLElement | React.MutableRefObject<HTMLElement>, run?: string | boolean | Array.<string, ...*>}} [options= { run: 'run' }] options
+ * @returns {{pending: (boolean | Object.<keyof T, boolean>), error: string, exec: (Promise<*> | T)}}
  */
 function useLoad(promiseFun, options) {
 	const isFun = useMemo(() => typeof promiseFun === 'function', [promiseFun])
@@ -39,34 +39,35 @@ function useLoad(promiseFun, options) {
 		}
 	}, [])
 
-	const dispatch = useCallback(
-		async (key = 'run', ...args) => {
-			const fun = isFun ? promiseFun : promiseFun[key]
-			return await pFun(fun, key, ...args)
-		},
-		[promiseFun, pFun],
-	)
-
-	const doRun = useCallback(
-		async (...args) => {
-			return await pFun(promiseFun, 'run', ...args)
-		},
-		[promiseFun, pFun],
-	)
+	const exec = useMemo(() => {
+		if (isFun) {
+			return async (...args) => await pFun(promiseFun, 'run', ...args)
+		} else {
+			return Object.keys(promiseFun).reduce((p, e) => (p[e] = async (...args) => await pFun(promiseFun[e], e, ...args), p), {})
+		}
+	}, [promiseFun, pFun])
 
 	useEffect(() => {
 		const { current } = run
 		if (current !== false) {
 			if (Array.isArray(current)) {
 				const key = current.splice(0, 1)
-				dispatch(key, ...current)
+				if (isFun) {
+					exec(...current)
+				} else {
+					exec[key](...current)
+				}
 			} else {
-				dispatch(current)
+				if (isFun) {
+					exec()
+				} else {
+					exec[current]()
+				}
 			}
 		}
 	}, [])
 
-	return { error: state.error, pending: state.pending, dispatch, run: doRun }
+	return { error: state.error, pending: state.pending, exec }
 }
 
 export default useLoad
