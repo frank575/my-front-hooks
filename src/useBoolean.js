@@ -7,6 +7,11 @@ const methods = {
 	setState: (_, e) => e,
 }
 
+/**
+ * 布林鉤子
+ * @param {boolean} initialValue
+ * @returns {[boolean, {setTrue: function(): boolean, setFalse: function(): boolean, toggle: function(): boolean, setState: function(state: boolean): boolean}]}
+ */
 function useBoolean(initialValue = false) {
 	const [bool, { setTrue, setFalse, toggle, setState }] = useMethods(
 		initialValue,

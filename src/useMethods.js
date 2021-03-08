@@ -1,6 +1,14 @@
 import { useMemo, useState } from 'react'
 
-function useMethods(initialValue, methods) {
+// return U 再想辦法找寫法，目前先這樣
+/**
+ * @template T
+ * @template U
+ * @param {T} initialValue
+ * @param {U} methods
+ * @returns {[T, U]}
+ */
+function useMethods (initialValue, methods) {
 	const [state, setState] = useState(initialValue)
 	const bindMethods = useMemo(
 		() =>
