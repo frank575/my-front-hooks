@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, MutableRefObject } f
  * 加載用鉤子
  * @template T
  * @param {Promise<*> | T} promiseFun
- * @param {{append?: HTMLElement | MutableRefObject<HTMLElement>, run?: string | boolean | Array.<string, ...*>}} [options= { run: 'run' }] options
- * @returns {{pending: (boolean | Object.<keyof T, boolean>), error: string, exec: (Promise<*> | T)}}
+ * @param {{append?: (HTMLElement | MutableRefObject<HTMLElement>), run?: (string | boolean | Array.<string, ...*>)}} [options= { run: 'run' }] options
+ * @returns {{pending: (boolean | Object.<keyof T, boolean>), error: string, exec: (T & { run: function(...args): Promise<*> })}}
  */
 function useLoad(promiseFun, options) {
 	const isFun = useMemo(() => typeof promiseFun === 'function', [promiseFun])
@@ -41,7 +41,7 @@ function useLoad(promiseFun, options) {
 
 	const exec = useMemo(() => {
 		if (isFun) {
-			return async (...args) => await pFun(promiseFun, 'run', ...args)
+			return { run: async (...args) => await pFun(promiseFun, 'run', ...args) }
 		} else {
 			return Object.keys(promiseFun).reduce((p, e) => (p[e] = async (...args) => await pFun(promiseFun[e], e, ...args), p), {})
 		}
@@ -52,17 +52,9 @@ function useLoad(promiseFun, options) {
 		if (current !== false) {
 			if (Array.isArray(current)) {
 				const key = current.splice(0, 1)
-				if (isFun) {
-					exec(...current)
-				} else {
-					exec[key](...current)
-				}
+				exec[key](...current)
 			} else {
-				if (isFun) {
-					exec()
-				} else {
-					exec[current]()
-				}
+				exec[current]()
 			}
 		}
 	}, [])
