@@ -16,8 +16,5 @@
   "bugs": {
     "url": "https://github.com/frank575/reactjs-hooks/issues"
   },
-  "homepage": "https://github.com/frank575/reactjs-hooks#readme",
-  "devDependencies": {
-    "prettier": "^2.2.1"
-  }
+  "homepage": "https://github.com/frank575/reactjs-hooks#readme"
 }
