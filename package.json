@@ -1,6 +1,6 @@
 {
   "name": "reactjs-hooks",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "version: `v0`",
   "main": "src/index.js",
   "scripts": {
